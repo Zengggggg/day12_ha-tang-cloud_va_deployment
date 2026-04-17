@@ -22,6 +22,8 @@ import os
 import time
 import signal
 import logging
+import signal
+import sys
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
@@ -92,6 +94,7 @@ def root():
 
 @app.post("/ask")
 async def ask_agent(question: str):
+    time.sleep()
     if not _is_ready:
         raise HTTPException(503, "Agent not ready")
     return {"answer": ask(question)}
@@ -191,7 +194,7 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     logger.info(f"Starting agent on port {port}")
     uvicorn.run(
-        app,
+        "app:app",
         host="0.0.0.0",
         port=port,
         # ✅ Cho phép graceful shutdown

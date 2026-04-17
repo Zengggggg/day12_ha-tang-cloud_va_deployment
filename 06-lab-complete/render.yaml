@@ -1,23 +1,22 @@
 services:
   - type: web
-    name: ai-agent-production
-    runtime: docker
-    region: singapore
-    plan: starter
-    healthCheckPath: /health
+    name: vinfast-route-planner-api
+    env: python
+    plan: free
+    rootDir: 06-lab-complete/app
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
     envVars:
-      - key: ENVIRONMENT
+      - key: APP_ENV
         value: production
-      - key: APP_VERSION
-        value: "1.0.0"
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: AGENT_API_KEY
-        generateValue: true
-      - key: JWT_SECRET
-        generateValue: true
-      - key: DAILY_BUDGET_USD
-        value: "5.0"
+      - key: CORS_ORIGINS
+        value: "*"
       - key: RATE_LIMIT_PER_MINUTE
-        value: "20"
+        value: "60"
+      - key: DAILY_REQUEST_BUDGET
+        value: "2000"
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: google/gemini-flash-1.5
